@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Asiscomex.FeedBack.Managers;
+using Asiscomex.FeedBack.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -26,6 +29,10 @@ namespace Asiscomex.FeedBack
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            string connection = Configuration.GetConnectionString("default");
+            services.AddDbContext<AsiscomexDbContext>(e => e.UseSqlServer(connection));
+            services.AddScoped<IUserManager, UserManager>();
+            services.AddScoped<ITaskManager, TaskManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
